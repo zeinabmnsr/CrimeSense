@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h2>Create Crime Report</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            <label for="title">Title</label>
+            {{ form.title(class="form-control") }}
+        </div>
+
+         <div class="form-group">
+            <label for="description">Description</label>
+            {{ form.description(class="form-control", rows=4) }}
+        </div>
+
+        <div class="form-group">
+            <label for="location">Location</label>
+            {{ form.location(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            <label for="crime_type">Crime Type</label>
+            {{ form.crime_type(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.date_occured.label }}<br>
+            {{ form.date_occured(class="form-control", type="date") }}
+        </div>
+
+        <div class="form-group">
+            <label for="is_public">Make Public</label>
+            {{ form.is_public(class="form-check-input") }}
+        </div>
+
+         <div class="form-group">
+            <label for="status">Status</label>
+            {{ form.status(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.image.label }} <br>
+            {{ form.image(class='form-control-file') }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit Report</button>
+    </form>
+{% endblock %}

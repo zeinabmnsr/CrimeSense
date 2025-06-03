@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', 
+  filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+  <link rel="stylesheet"
+   href="{{ url_for('static', 
+   filename='css/bootstrap-icons.css') }}">
+  <title>Register</title>
+</head>
+<body>
+  <div class="container">
+    <div class="card mt-5">
+      <div class="row">
+        <div class="col-lg-6">
+          <img src="static/images/background/3dloginbg.png" class="mt-2 w-75 h-100">
+        </div>
+        <div class="col-lg-6">
+          <div class="card-body">
+            <div class="card-text">
+              <h3>REGISTER NEW ACCOUNT</h3>
+            </div>
+
+           <form method="POST">
+    {{ form.hidden_tag() }}  <!-- Ensures CSRF token is included -->
+    
+    <div class="form-floating mb-3 mt-2">
+        {{ form.first_name(class="form-control", placeholder="Enter First Name") }}
+        <label for="first_name">First Name</label>
+    </div>
+
+    <div class="form-floating mb-3 mt-2">
+        {{ form.last_name(class="form-control", placeholder="Enter Last Name") }}
+        <label for="last_name">Last Name</label>
+    </div>
+
+    <div class="form-floating mb-3 mt-3">
+        {{ form.email(class="form-control", id="email", placeholder="Enter email") }}
+        <label for="email">Email</label>
+    </div>
+
+    <div class="form-floating mt-3 mb-3">
+        {{ form.password(class="form-control", id="password", placeholder="Enter password") }}
+        <label for="password">Password</label>
+    </div>
+    
+    <div class="form-floating mb-3">
+        {{ form.confirm_password(class="form-control", placeholder="Confirm Password") }}
+        <label for="confirm_password">Confirm Password</label>
+    </div>
+
+    <button class="btn btn-primary" type="submit">REGISTER</button>
+</form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
+
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
+

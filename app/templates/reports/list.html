@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Crime Reports</h2>
+    <a href="{{ url_for('reports.create_report') }}" class="btn btn-success">Create Report</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Location</th>
+                <th>description</th>
+                <th>date occured</th>
+                <th>date reported</th>
+                <th>Crime Type</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in reports %}
+            <tr>
+                <td>{{ report.title }}</td>
+                <td>{{ report.location }}</td>
+                <td>{{ report.description }}</td>
+                <td>{{ report.date_occured }}</td>
+                <td>{{ report.date_reported }}</td>
+                <td>{{ report.crime_type }}</td>
+                <td>{{ report.status }}</td>
+                <td>Reported by: {{ reporter.name if reporter else 'Unknown' }}</td>
+
+                <td>
+
+                {% if report.image_path %}
+                <img src="{{ url_for('statuc', filename='uploads/' + report.image_path) }}"
+                 alt="Crime Image" class="img-fluid" width="200" height="150">
+                {% endif %}
+
+
+                    <a href="{{ url_for('reports.edit_report', report_id=report._id) }}" class="btn btn-warning">Edit</a>
+                  <form action="{{ url_for('reports.delete_report', report_id=report._id) }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

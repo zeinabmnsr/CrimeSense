@@ -1,0 +1,9 @@
+.card-text{
+    color: rgb(27, 30, 66);
+}
+.btn{
+    color: rgb(251, 253, 255);
+    background-color: rgb(27, 30, 66);
+    width: 100%;
+    border-color: rgb(27, 30, 66);
+}
