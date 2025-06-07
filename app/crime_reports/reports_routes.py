@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask import Blueprint, render_template, session, request, redirect, url_for, flash, current_app
 from bson import ObjectId
+from bson.errors import InvalidId
 from app.models import reports
 from app.models.reports import CrimeReport
 from app.models.user import User
@@ -66,13 +67,17 @@ def create_report():
 def edit_report(report_id):
     """Admin edits an existing crime report"""
     db = current_app.db
-    report = CrimeReport.get_report_by_id(report_id, db)
+    try:
+        report = CrimeReport.get_report_by_id(report_id, db)
+    except InvalidId:
+        flash("Invalid report ID.", "danger")
+        return redirect(url_for("reports.list_reports"))
     
     if not report:
         flash("Report not found.", "danger")
         return redirect(url_for("reports.list_reports"))
 
-    if str(report["reported_by"]) != str(current_user._id):
+    if str(report["reported_by"]) != current_user.get_id():
         flash("You can only edit reports you submitted.", "danger")
         return redirect(url_for("reports.list_reports"))
 
@@ -106,13 +111,17 @@ def edit_report(report_id):
 def delete_report(report_id):
     """Admin deletes a crime report"""
     db = current_app.db
-    report = CrimeReport.get_report_by_id(report_id, db)
+    try:
+        report = CrimeReport.get_report_by_id(report_id, db)
+    except InvalidId:
+        flash("Invalid report ID.", "danger")
+        return redirect(url_for("reports.list_reports"))
 
     if not report:
         flash("Report not found.", "danger")
         return redirect(url_for("reports.list_reports"))
 
-    if str(report["reported_by"]) != str(current_user._id):
+    if str(report["reported_by"]) != current_user.get_id():
         flash("You can only delete reports you submitted.", "danger")
         return redirect(url_for("reports.list_reports"))
 
