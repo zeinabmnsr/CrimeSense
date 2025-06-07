@@ -8,10 +8,11 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_wtf.csrf import CSRFProtect 
+from app import csrf
 
 auth_bp = Blueprint('auth', __name__)
 
-csrf = CSRFProtect()
+#csrf = CSRFProtect()
 
 # Create Limiter instance (Only if not initialized in `__init__.py`)
 limiter = Limiter(get_remote_address, default_limits=["5 per minute"])
