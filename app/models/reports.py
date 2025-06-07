@@ -19,7 +19,7 @@ class CrimeReport:
         report = {
             "title": data["title"],
             "description": data["description"],
-            "loctation": data["location"],
+            "location": data["location"],
             "crime_type": data["crime_type"],
             "date_reported": datetime.utcnow(),
             "date_occured": data["date_occured"],
@@ -28,7 +28,7 @@ class CrimeReport:
             "status": data.get("status", "Pending"),
             "image_path": data.get("image_path")
         }
-        #optional nraje3 el inserted_id , fro success msgs or redirects
+        #optional nraje3 el inserted_id , for success msgs or redirects
         return db.crime_reports.insert_one(report) .inserted_id
     @staticmethod 
     def get_report_by_id(report_id, db):

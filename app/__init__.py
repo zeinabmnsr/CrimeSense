@@ -53,8 +53,10 @@ def create_app():
     print("MONGO_URI:", mongo_uri)
     print("Connected Database:", db.name)
 
-    from app.auth.routes import auth_bp
+    from app.auth.routes import auth_bp, auth_api_bp
     app.register_blueprint(auth_bp, url_prefix="/auth")
+    csrf.exempt(auth_api_bp)
+    app.register_blueprint(auth_api_bp)
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -64,6 +66,7 @@ def create_app():
     app.register_blueprint(reports_bp)
 
     from app.crime_reports.reports_api_routes import reports_api_bp
+    csrf.exempt(reports_api_bp)
     app.register_blueprint(reports_api_bp)
 
 
