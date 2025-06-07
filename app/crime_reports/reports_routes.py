@@ -70,6 +70,10 @@ def edit_report(report_id):
         flash("Report not found.", "danger")
         return redirect(url_for("reports.list_reports"))
     
+    if report["reported_by"] != ObjectId(current_user.get_id()):
+        flash("You can only edit reports you submitted.", "danger")
+        return redirect(url_for("reports.list_reports"))
+    
     form = CrimeReportForm(data=report)
 
     if form.validate_on_submit():

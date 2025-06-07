@@ -63,5 +63,8 @@ def create_app():
     from app.crime_reports.reports_routes import reports_bp
     app.register_blueprint(reports_bp)
 
+    from app.crime_reports.reports_api_routes import reports_api_bp
+    app.register_blueprint(reports_api_bp)
+
 
     return app
