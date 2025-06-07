@@ -4,7 +4,8 @@ from flask_login import UserMixin
 
 class User(UserMixin):
     def __init__(self, user_dict):
-        self.id = str(user_dict["_id"])
+        self._id = user_dict["_id"]  # Store the raw ObjectId
+        self.id = str(self._id)      # Keep string version for Flask-Login
         self.email = user_dict["email"]
         self.password_hash = user_dict["password"]
         self.first_name = user_dict.get("first_name", "")
