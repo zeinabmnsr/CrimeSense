@@ -11,7 +11,7 @@ from flask_wtf.csrf import CSRFProtect
 from app import csrf
 
 auth_bp = Blueprint('auth', __name__)
-
+csrf.exempt(auth_bp)
 #csrf = CSRFProtect()
 
 # Create Limiter instance (Only if not initialized in `__init__.py`)
