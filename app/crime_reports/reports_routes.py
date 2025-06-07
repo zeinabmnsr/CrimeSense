@@ -70,7 +70,7 @@ def edit_report(report_id):
         flash("Report not found.", "danger")
         return redirect(url_for("reports.list_reports"))
     
-    if report["reported_by"] != current_user._id:
+    if str(report["reported_by"]) != str(current_user._id):
         flash("You can only edit reports you submitted.", "danger")
         return redirect(url_for("reports.list_reports"))
     
@@ -105,7 +105,7 @@ def delete_report(report_id):
     """Admin deletes a crime report"""
     db = current_app.db
     report = CrimeReport.get_report_by_id(report_id, db)
-    if report and report["reported_by"] != current_user._id:
+    if report and str(report["reported_by"]) != str(current_user._id):
         flash("You can only delete reports you submitted." , "danger")
         return redirect(url_for("reports.list_reports"))
     
