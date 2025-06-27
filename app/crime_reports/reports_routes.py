@@ -51,7 +51,7 @@ def create_report():
             "date_reported": datetime.utcnow(),
             "is_public": form.is_public.data,
             "status": form.status.data,
-            "reported_by": ObjectId(current_user.get_id()),
+            "reported_by": ObjectId(session.get("user_id")),
             "image_path": image_filename
         }
 
@@ -78,9 +78,9 @@ def edit_report(report_id):
         return redirect(url_for("reports.list_reports"))
 
     print("reported_by in DB:", report["reported_by"])
-    print("current_user ID:", current_user.get_id())
+    print("current_user ID:", session.get("user_id"))
 
-    if str(report["reported_by"]) != current_user.get_id():
+    if str(report["reported_by"]) != session.get("user_id"):
         flash("You can only edit reports you submitted.", "danger")
         return redirect(url_for("reports.list_reports"))
 
@@ -125,7 +125,8 @@ def delete_report(report_id):
         return redirect(url_for("reports.list_reports"))
     
     print("reported_by in DB:", report["reported_by"])
-    print("current_user ID:", current_user.get_id())
+    print("current_user ID:", session.get("user_id"))
+    print("User ID stored in session:", session.get("user_id"))
 
     if str(report["reported_by"]) != session.get("user_id"):
     #if str(report["reported_by"]) != current_user.get_id():
