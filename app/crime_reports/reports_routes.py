@@ -77,6 +77,9 @@ def edit_report(report_id):
         flash("Report not found.", "danger")
         return redirect(url_for("reports.list_reports"))
 
+    print("reported_by in DB:", report["reported_by"])
+    print("current_user ID:", current_user.get_id())
+
     if str(report["reported_by"]) != current_user.get_id():
         flash("You can only edit reports you submitted.", "danger")
         return redirect(url_for("reports.list_reports"))
@@ -120,8 +123,12 @@ def delete_report(report_id):
     if not report:
         flash("Report not found.", "danger")
         return redirect(url_for("reports.list_reports"))
+    
+    print("reported_by in DB:", report["reported_by"])
+    print("current_user ID:", current_user.get_id())
 
-    if str(report["reported_by"]) != current_user.get_id():
+    if str(report["reported_by"]) != session.get("user_id"):
+    #if str(report["reported_by"]) != current_user.get_id():
         flash("You can only delete reports you submitted.", "danger")
         return redirect(url_for("reports.list_reports"))
 

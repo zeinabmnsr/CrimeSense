@@ -12,13 +12,13 @@ auth_bp = Blueprint('auth', __name__)
 # Blueprint for API-based (JWT) authentication
 auth_api_bp = Blueprint('auth_api', __name__, url_prefix='/api/auth')
 
-limiter = Limiter(get_remote_address, default_limits=["5 per minute"])
+limiter = Limiter(get_remote_address, default_limits=["10 per minute"])
 
 # --- Web Routes (Session-Based) ---
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 @login_required
-@limiter.limit("3 per minute")
+@limiter.limit("10 per minute")
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -39,7 +39,7 @@ def register():
     return render_template('register.html', form=form)
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
-@limiter.limit("5 per minute")
+@limiter.limit("10 per minute")
 def login():
     form = LoginForm()
     if form.validate_on_submit():
