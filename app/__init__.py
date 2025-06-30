@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, current_app
 from pymongo import MongoClient
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_cors import CORS
@@ -9,6 +9,7 @@ import os
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager 
 from app.models.user import User 
+from app.crime_parser.parse_crime_data import parse_and_insert
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 login_manager = LoginManager()
@@ -41,10 +42,12 @@ def create_app():
     db = client.get_database() 
     app.db = db  
     
+    #current_app.db["parsed_crimes"]
+
     limiter = Limiter(
         get_remote_address, 
         app = app,
-        default_limits=["5 per minute"]
+        default_limits=["10 per minute"]
     )
 
     #csrf = CSRFProtect(app)
@@ -55,7 +58,9 @@ def create_app():
 
     from app.auth.routes import auth_bp, auth_api_bp
     app.register_blueprint(auth_bp, url_prefix="/auth")
+
     csrf.exempt(auth_api_bp)
+
     app.register_blueprint(auth_api_bp)
 
     @login_manager.user_loader
@@ -68,6 +73,9 @@ def create_app():
     from app.crime_reports.reports_api_routes import reports_api_bp
     csrf.exempt(reports_api_bp)
     app.register_blueprint(reports_api_bp)
+
+    from app.user_contacts.contacts_api_routes import contacts_api_bp
+    app.register_blueprint(contacts_api_bp)
 
 
     return app
