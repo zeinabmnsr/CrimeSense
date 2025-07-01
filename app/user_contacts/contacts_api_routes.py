@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from bson import ObjectId
 from app.models.contacts import EmergencyContact
-from app.user_contacts.contacts_form import validate_phone_number
+from app.user_contacts.contacts_forms import validate_phone_number
 
 contacts_api = Blueprint('contacts_api', __name__, url_prefix='/api/contacts')
 
