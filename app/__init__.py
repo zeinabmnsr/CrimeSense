@@ -75,6 +75,7 @@ def create_app():
     app.register_blueprint(reports_api_bp)
 
     from app.user_contacts.contacts_api_routes import contacts_api
+    csrf.exempt(contacts_api)
     app.register_blueprint(contacts_api)
 
 
