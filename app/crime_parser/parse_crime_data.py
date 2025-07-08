@@ -1,5 +1,4 @@
 import pandas as pd 
-#from pymongo import MongoClient 
 from flask import current_app 
 #from tqdm import tqdm 
 

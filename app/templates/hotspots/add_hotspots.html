@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Add Hotspot</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+
+    <div>
+      {{ form.crime_type.label }}<br>
+      {{ form.crime_type() }}
+    </div>
+
+    <div>
+      {{ form.location.label }}<br>
+      {{ form.location() }}
+    </div>
+
+    <div>
+      {{ form.danger_time.label }}<br>
+      {{ form.danger_time() }}
+    </div>
+
+    <div>
+      {{ form.notes.label }}<br>
+      {{ form.notes(rows=3) }}
+    </div>
+
+    <div>
+      {{ form.lat.label }} (optional now)<br>
+      {{ form.lat() }}
+    </div>
+
+    <div>
+      {{ form.lng.label }} (optional now)<br>
+      {{ form.lng() }}
+    </div>
+
+    <button type="submit">{{ form.submit.label }}</button>
+  </form>
+{% endblock %}

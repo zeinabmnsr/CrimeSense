@@ -78,5 +78,9 @@ def create_app():
     csrf.exempt(contacts_api)
     app.register_blueprint(contacts_api)
 
+    from app.hotspots.hotspots_api_routes import hotspots_api_bp
+    app.register_blueprint(hotspots_api_bp) 
 
+    from app.hotspots.hotspots_routes import hotspots_bp 
+    app.register_blueprint(hotspots_bp)
     return app

@@ -21,4 +21,4 @@ class CrimeReportForm(FlaskForm):
         FileAllowed(['jpg', 'jpeg', 'png', 'gif'], 'Images only!')
     ])
     
-    submit = SubmitField("Submit")
+    submit = SubmitField("Submit") 

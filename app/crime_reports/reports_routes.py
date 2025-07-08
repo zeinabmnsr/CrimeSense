@@ -25,7 +25,7 @@ def list_reports():
     
     for report in reports:
         reporter = db.users.find_one({"_id": report["reported_by"]})
-        report["reported_name"] = f"{reporter.get('first_name', '')} {reporter.get('last_name', '')}" if reporter else "Unknown"
+        report["reporter_name"] = f"{reporter.get('first_name', '')} {reporter.get('last_name', '')}" if reporter else "Unknown"
     
     return render_template("reports/list.html", reports=reports)
 

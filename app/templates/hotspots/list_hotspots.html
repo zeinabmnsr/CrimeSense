@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Hotspot List</h2>
+  <a href="{{ url_for('hotspots.create_hotspot') }}">+ Add New Hotspot</a>
+<p>Total Hotspots: {{ hotspots | length }}</p>
+
+  {% for h in hotspots %}
+    <div style="border:1px solid #ccc; margin:10px; padding:10px;">
+      <strong>Crime Type:</strong> {{ h['crime_type'] }}<br>
+      <strong>Location:</strong> {{ h['location'] }}<br>
+      <strong>Lat:</strong> {{ h['lat'] }} | <strong>Lng:</strong> {{ h['lng'] }}<br>
+      <strong>Danger Time:</strong> {{ h['danger_time'] }}<br>
+      <strong>Notes:</strong> {{ h['notes'] }}<br>
+      <strong>Reported By:</strong> {{ h['sender_name'] }}<br>
+
+      <a href="{{ url_for('hotspots.edit_hotspot', hotspot_id=h['_id']) }}">Edit</a>
+      <form method="POST" action="{{ url_for('hotspots.delete_hotspot', hotspot_id=h['_id']) }}" style="display:inline;">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit">Delete</button>
+</form>
+
+    </div>
+  {% endfor %}
+{% endblock %}

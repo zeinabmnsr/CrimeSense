@@ -1,2 +1,6 @@
 .env
 app/crime_parser/*.xlsx
+__pycache__
+/test_predictor.py
+/train_model_script.py
+/prediction_model/

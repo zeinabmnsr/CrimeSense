@@ -1,3 +1,8 @@
+.card{
+   width: 550px;
+   margin-top: 1000px;
+    box-shadow: 0 4px 8px 0 rgba(27, 30, 66), 0 6px 20px 0 rgba(27, 30, 66);
+}
 .card-text{
     color: rgb(27, 30, 66);
 }
@@ -6,4 +11,11 @@
     background-color: rgb(27, 30, 66);
     width: 100%;
     border-color: rgb(27, 30, 66);
+}
+.login{
+    background-image: url("../images/background/loginblueimg.jpg");
+    background-size: cover;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
 }

@@ -10,7 +10,7 @@ reports_api_bp = Blueprint("reports_api", __name__, url_prefix="/api/reports")
 
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
-
+ 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -19,7 +19,10 @@ def allowed_file(filename):
 @jwt_required()
 def create_report():
     """Allows a mobile user to create a new crime report."""
-    data = request.form.to_dict()
+    if request.is_json:
+        data = request.get_json()
+    else:
+        data = request.form.to_dict()
     db = current_app.db
     current_user_id = get_jwt_identity()
 
