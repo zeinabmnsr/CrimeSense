@@ -27,8 +27,7 @@
                 <td>{{ report.date_reported }}</td>
                 <td>{{ report.crime_type }}</td>
                 <td>{{ report.status }}</td>
-                <td>Reported by: {{ reporter.name if reporter else 'Unknown' }}</td>
-
+                <td>Reported by: {{ report.reporter_name }}</td>
                 <td>
 
                 {% if report.image_path %}
