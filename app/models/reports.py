@@ -31,6 +31,7 @@ class CrimeReport:
         }
         #optional nraje3 el inserted_id , for success msgs or redirects
         return db.crime_reports.insert_one(report).inserted_id
+    
     @staticmethod 
     def get_report_by_id(report_id, db):
           """Fetch a crime report by ID"""

@@ -1,17 +1,19 @@
 {% extends "base.html" %}
 {% block content %}
-    <h2>All Crime Reports</h2>
 
-    <table class="table">
+    <h2>Admin Submitted Reports</h2>
+
+    {% if reports %}
+
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Title</th>
-                <th>Location</th>
-                <th>description</th>
-                <th>date occured</th>
-                <th>date reported</th>
                 <th>Crime Type</th>
+                <th>Location</th>
                 <th>Status</th>
+                <th>Reporter</th>
+                <th>Date Occurred</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -25,26 +27,28 @@
                 <td>{{ report.date_reported }}</td>
                 <td>{{ report.crime_type }}</td>
                 <td>{{ report.status }}</td>
-                <td>Reported by: {{ report.reporter_name }}</td>
+                <td>{{ report.reporter_name }}</td>
                 <td>
-
                 {% if report.image_path %}
-                <img src="{{ url_for('statuc', filename='uploads/' + report.image_path) }}"
+                <img src="{{ url_for('static', filename='uploads/' + report.image_path) }}"
                  alt="Crime Image" class="img-fluid" width="200" height="150">
                 {% endif %}
 
                 <a href="{{ url_for('reports.edit_report', report_id=report._id) }}" class="btn btn-sm btn-warning">Edit</a>
-                <a href="{{ url_for('reports.view_report', report_id=report._id) }}" class="btn btn-sm btn-info">View</a>
-               
 
                 <form action="{{ url_for('reports.delete_report', report_id=report._id) }}" method="POST">
                     <!--el input chufeha chu hye-->
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+                    <button class="btn btn-danger btn-sm" type="submit">Delete</button>
                 </form>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
+{% else %}
+    <p>No admin reports found.</p>
+{% endif %}
+
 {% endblock %}

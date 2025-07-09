@@ -8,25 +8,10 @@
 <body>
 
     <nav>
-        <a href="{{ url_for('reports.list_reports') }}">All Reports</a>
-        <a href="{{ url_for('reports.create_report') }}">Create Report</a>
+    <a href="{{ url_for('reports.list_admin_reports') }}">Admin Reports</a>
+    <a href="{{ url_for('reports.list_user_reports') }}">Mobile User Reports</a>
+    <a href="{{ url_for('reports.create_report') }}">Create Report</a>
     </nav>
-
-
-    <div class="container">
-        {% block content %}
-        
-
-    <h2>Crime Reports Management</h2>
-
-    <ul>
-        <li><a href="{{ url_for('reports.list_reports') }}">View All Reports</a></li>
-        <li><a href="{{ url_for('reports.create_report') }}">Create New Report</a></li>
-    </ul>
-
-        
-        {% endblock %}
-    </div>
 
     <footer>
         <p>&copy; 2025 CrimeSense</p>

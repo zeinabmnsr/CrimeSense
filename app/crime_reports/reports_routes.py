@@ -18,16 +18,16 @@ ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
 
 @reports_bp.route("/reports", methods=["GET"])
 @login_required
-def list_reports():
-    """Show all crime reports"""
+def list_admin_reports():
+    """Show only reports created by admins"""
     db = current_app.db
-    reports = CrimeReport.get_all_reports(db)
-    
+    reports = CrimeReport.get_all_reports(db, filters={"submitter_role": "admin"})
+
     for report in reports:
         reporter = db.users.find_one({"_id": report["reported_by"]})
         report["reporter_name"] = f"{reporter.get('first_name', '')} {reporter.get('last_name', '')}" if reporter else "Unknown"
     
-    return render_template("reports/list.html", reports=reports)
+    return render_template("reports/list_admin.html", reports=reports)
 
 @reports_bp.route("/reports/create", methods=["GET", "POST"])
 @login_required
@@ -138,10 +138,10 @@ def delete_report(report_id):
     flash("Crime report deleted successfully!", "success")
     return redirect(url_for("reports.list_reports"))
 
-@reports_bp.route("/user-reports", methods=["GET"])
+@reports_bp.route("/reports/user-submissions", methods=["GET"])
 @login_required
-def view_user_reports():
-    """Admin view of reports submitted by mobile users."""
+def list_user_reports():
+    """Show only reports submitted by mobile users"""
     db = current_app.db
     reports = CrimeReport.get_all_reports(db, filters={"submitter_role": "user"})
 
@@ -149,4 +149,4 @@ def view_user_reports():
         reporter = db.users.find_one({"_id": report["reported_by"]})
         report["reporter_name"] = f"{reporter.get('first_name', '')} {reporter.get('last_name', '')}" if reporter else "Unknown"
     
-    return render_template("reports/user_reports.html", reports=reports)
+    return render_template("reports/list_user.html", reports=reports)
