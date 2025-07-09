@@ -1,8 +1,6 @@
 {% extends "base.html" %}
-
 {% block content %}
-    <h2>Crime Reports</h2>
-    <a href="{{ url_for('reports.create_report') }}" class="btn btn-success">Create Report</a>
+    <h2>All Crime Reports</h2>
 
     <table class="table">
         <thead>
@@ -35,12 +33,15 @@
                  alt="Crime Image" class="img-fluid" width="200" height="150">
                 {% endif %}
 
+                <a href="{{ url_for('reports.edit_report', report_id=report._id) }}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{{ url_for('reports.view_report', report_id=report._id) }}" class="btn btn-sm btn-info">View</a>
+               
 
-                    <a href="{{ url_for('reports.edit_report', report_id=report._id) }}" class="btn btn-warning">Edit</a>
-                  <form action="{{ url_for('reports.delete_report', report_id=report._id) }}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <button type="submit" class="btn btn-danger">Delete</button>
-</form>
+                <form action="{{ url_for('reports.delete_report', report_id=report._id) }}" method="POST">
+                    <!--el input chufeha chu hye-->
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+                </form>
                 </td>
             </tr>
             {% endfor %}

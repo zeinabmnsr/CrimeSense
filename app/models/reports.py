@@ -24,6 +24,7 @@ class CrimeReport:
             "date_reported": datetime.utcnow(),
             "date_occured": data["date_occured"],
             "reported_by": data["reported_by"],
+            "submitter_role": data.get("submitter_role", "user"),
             "is_public" : data.get("is_public", False),
             "status": data.get("status", "Pending"),
             "image_path": data.get("image_path")

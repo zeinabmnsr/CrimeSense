@@ -52,6 +52,7 @@ def create_report():
             "is_public": form.is_public.data,
             "status": form.status.data,
             "reported_by": ObjectId(session.get("user_id")),
+            "submitter_role": "admin",
             "image_path": image_filename
         }
 
@@ -136,3 +137,16 @@ def delete_report(report_id):
     CrimeReport.delete_report(report_id, db)
     flash("Crime report deleted successfully!", "success")
     return redirect(url_for("reports.list_reports"))
+
+@reports_bp.route("/user-reports", methods=["GET"])
+@login_required
+def view_user_reports():
+    """Admin view of reports submitted by mobile users."""
+    db = current_app.db
+    reports = CrimeReport.get_all_reports(db, filters={"submitter_role": "user"})
+
+    for report in reports:
+        reporter = db.users.find_one({"_id": report["reported_by"]})
+        report["reporter_name"] = f"{reporter.get('first_name', '')} {reporter.get('last_name', '')}" if reporter else "Unknown"
+    
+    return render_template("reports/user_reports.html", reports=reports)

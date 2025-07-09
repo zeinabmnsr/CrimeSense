@@ -50,6 +50,7 @@ def create_report():
         "crime_type": data.get("crime_type"),
         "date_occured": date_occured,
         "reported_by": ObjectId(current_user_id),
+        "submitter_role": "user",
         "is_public": False,
         "status": "Pending",
         "image_path": data.get("image_path")
