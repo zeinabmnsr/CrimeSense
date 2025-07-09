@@ -23,7 +23,7 @@ class CrimeReport:
             "crime_type": data["crime_type"],
             "date_reported": datetime.utcnow(),
             "date_occured": data["date_occured"],
-            "reported_by": ObjectId(data["reported_by"]),
+            "reported_by": data["reported_by"],
             "is_public" : data.get("is_public", False),
             "status": data.get("status", "Pending"),
             "image_path": data.get("image_path")

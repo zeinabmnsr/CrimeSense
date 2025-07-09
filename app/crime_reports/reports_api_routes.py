@@ -12,19 +12,20 @@ UPLOAD_FOLDER = os.path.join('static', 'uploads')
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif'}
  
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.rsplit(
+        '.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @reports_api_bp.route("/create", methods=['POST'])
 @jwt_required()
 def create_report():
     """Allows a mobile user to create a new crime report."""
+    db = current_app.db
+    current_user_id = get_jwt_identity()
+
     if request.is_json:
         data = request.get_json()
     else:
         data = request.form.to_dict()
-    db = current_app.db
-    current_user_id = get_jwt_identity()
 
     if 'image' in request.files:
         image = request.files['image']
@@ -35,25 +36,32 @@ def create_report():
             data['image_path'] = image_filename
         else:
             return jsonify({"error": "Invalid image file"}), 400
+        
+        # Convert date_occured
+    try:
+        date_occured = datetime.fromisoformat(data["date_occured"]) if data.get("date_occured") else datetime.utcnow()
+    except Exception:
+        return jsonify({"error": "Invalid or missing date_occured"}), 400
 
     report_data = {
         "title": data.get("title"),
         "description": data.get("description"),
         "location": data.get("location"),
         "crime_type": data.get("crime_type"),
-        "date_occured": datetime.fromisoformat(data["date_occured"]) if data.get("date_occured") else datetime.utcnow(),
+        "date_occured": date_occured,
         "reported_by": ObjectId(current_user_id),
-        "is_public": False, # Defaults to False for mobile reports
-        "status": "Pending", # Defaults to Pending
+        "is_public": False,
+        "status": "Pending",
         "image_path": data.get("image_path")
     }
 
-    # Validate required fields
+    # Validate required fields 
     required_fields = ["title", "description", "location", "crime_type", "date_occured"]
     for field in required_fields:
         if not report_data[field]:
             return jsonify({"error": f"Missing required field: {field}"}), 400
-
+        
+        # Insert into DB
     report_id = CrimeReport.created_report(report_data, db)
     return jsonify({"message": "Report created successfully", "report_id": str(report_id)}), 201
 
