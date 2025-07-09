@@ -40,7 +40,11 @@ def create_report():
             image = form.image.data
             filename = secure_filename(image.filename)
             image_filename = datetime.utcnow().strftime("%Y%m%d%H%M%S_") + filename
-            image.save(os.path.join(UPLOAD_FOLDER, image_filename))
+            
+            upload_path = os.path.join(current_app.root_path, 'static', 'uploads')
+            os.makedirs(upload_path, exist_ok=True)
+
+            image.save(os.path.join(upload_path, image_filename))
 
         report_data = {
             "title": form.title.data,
@@ -59,7 +63,7 @@ def create_report():
         db = current_app.db
         CrimeReport.created_report(report_data, db)
         flash("Crime report created successfully!", "success")
-        return redirect(url_for("reports.list_reports"))
+        return redirect(url_for("reports.list_admin_reports"))
 
     return render_template("reports/create.html", form=form)
 
@@ -72,18 +76,18 @@ def edit_report(report_id):
         report = CrimeReport.get_report_by_id(report_id, db)
     except InvalidId:
         flash("Invalid report ID.", "danger")
-        return redirect(url_for("reports.list_reports"))
+        return redirect(url_for("reports.list_admin_reports"))
     
     if not report:
         flash("Report not found.", "danger")
-        return redirect(url_for("reports.list_reports"))
+        return redirect(url_for("reports.list_admin_reports"))
 
     print("reported_by in DB:", report["reported_by"])
     print("current_user ID:", session.get("user_id"))
 
     if str(report["reported_by"]) != session.get("user_id"):
         flash("You can only edit reports you submitted.", "danger")
-        return redirect(url_for("reports.list_reports"))
+        return redirect(url_for("reports.list_admin_reports"))
 
     form = CrimeReportForm(data=report)
 
@@ -106,7 +110,7 @@ def edit_report(report_id):
 
         CrimeReport.update_report(report_id, updated_data, db)
         flash("Crime report updated successfully!", "success")
-        return redirect(url_for("reports.list_reports"))
+        return redirect(url_for("reports.list_admin_reports"))
 
     return render_template("reports/edit.html", form=form, report_id=report_id)
 
@@ -119,11 +123,11 @@ def delete_report(report_id):
         report = CrimeReport.get_report_by_id(report_id, db)
     except InvalidId:
         flash("Invalid report ID.", "danger")
-        return redirect(url_for("reports.list_reports"))
+        return redirect(url_for("reports.list_admin_reports"))
 
     if not report:
         flash("Report not found.", "danger")
-        return redirect(url_for("reports.list_reports"))
+        return redirect(url_for("reports.list_admin_reports"))
     
     print("reported_by in DB:", report["reported_by"])
     print("current_user ID:", session.get("user_id"))
@@ -132,11 +136,11 @@ def delete_report(report_id):
     if str(report["reported_by"]) != session.get("user_id"):
     #if str(report["reported_by"]) != current_user.get_id():
         flash("You can only delete reports you submitted.", "danger")
-        return redirect(url_for("reports.list_reports"))
+        return redirect(url_for("reports.list_admin_reports"))
 
     CrimeReport.delete_report(report_id, db)
     flash("Crime report deleted successfully!", "success")
-    return redirect(url_for("reports.list_reports"))
+    return redirect(url_for("reports.list_admin_reports"))
 
 @reports_bp.route("/reports/user-submissions", methods=["GET"])
 @login_required

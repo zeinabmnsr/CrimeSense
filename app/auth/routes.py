@@ -1,3 +1,4 @@
+from bson import ObjectId
 from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, session, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -52,7 +53,7 @@ def login():
             session['user_id'] = str(user['_id'])
             flash('Login successful!', 'success')
             return redirect(url_for('auth.home'))
-
+######zabte el redirect hon
         flash('Invalid email or password.', 'danger')
 
     return render_template('login.html', form=form)
@@ -66,7 +67,16 @@ def dashboard():
 @auth_bp.route('/home')
 @login_required
 def home():
-    return render_template("home.html", user_id=session['user_id'])
+    db = current_app.db
+    user = db.users.find_one({"_id": ObjectId(session['user_id'])})
+    
+    if not user:
+        flash("User not found.", "danger")
+        return redirect(url_for("auth.login"))
+
+    return render_template("home.html", 
+                           first_name=user.get("first_name", ""),
+                           last_name=user.get("last_name", ""))
 
 @auth_bp.route('/logout', methods=['POST'])
 @login_required

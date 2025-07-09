@@ -20,7 +20,8 @@
     </form>
 
     <nav>
-        <a href="{{ url_for('reports.list_reports') }}">View Crime Reports</a>
+        <a href="{{ url_for('reports.list_admin_reports') }}">Admin Reports</a>
+        <a href="{{ url_for('reports.list_user_reports') }}">Mobile Reports</a>
         <a href="{{ url_for('reports.create_report') }}">Manage Crime Reports</a>
     </nav>
 

@@ -12,6 +12,11 @@
     <a href="{{ url_for('reports.list_user_reports') }}">Mobile User Reports</a>
     <a href="{{ url_for('reports.create_report') }}">Create Report</a>
     </nav>
+ 
+    
+  {% block content %}
+  <!-- Page-specific content will appear here -->
+  {% endblock %}
 
     <footer>
         <p>&copy; 2025 CrimeSense</p>

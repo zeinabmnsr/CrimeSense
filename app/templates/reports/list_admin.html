@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block content %}
 
     <h2>Admin Submitted Reports</h2>
@@ -11,9 +12,11 @@
                 <th>Title</th>
                 <th>Crime Type</th>
                 <th>Location</th>
+                <th>description</th>
                 <th>Status</th>
                 <th>Reporter</th>
                 <th>Date Occurred</th>
+                <th>date repoted </th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -34,9 +37,9 @@
                  alt="Crime Image" class="img-fluid" width="200" height="150">
                 {% endif %}
 
-                <a href="{{ url_for('reports.edit_report', report_id=report._id) }}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{{ url_for('reports.edit_report', report_id=report['_id']) }}" class="btn btn-sm btn-warning">Edit</a>
 
-                <form action="{{ url_for('reports.delete_report', report_id=report._id) }}" method="POST">
+                <form action="{{ url_for('reports.delete_report', report_id=report['_id']) }}" method="POST">
                     <!--el input chufeha chu hye-->
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button class="btn btn-danger btn-sm" type="submit">Delete</button>

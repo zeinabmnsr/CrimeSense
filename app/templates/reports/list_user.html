@@ -9,11 +9,13 @@
         <thead>
             <tr>
                 <th>Title</th>
-                <th>Crime Type</th>
                 <th>Location</th>
+                <th>description</th>
+                <th>Crime Type</th>
                 <th>Status</th>
                 <th>Reporter</th>
                 <th>Date Occurred</th>
+                <th>Date Reported </th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -23,9 +25,9 @@
                 <td>{{ report.title }}</td>
                 <td>{{ report.location }}</td>
                 <td>{{ report.description }}</td>
+                <td>{{ report.crime_type }}</td>
                 <td>{{ report.date_occured }}</td>
                 <td>{{ report.date_reported }}</td>
-                <td>{{ report.crime_type }}</td>
                 <td>{{ report.status }}</td>
                 <td>{{ report.reporter_name }}</td>
                 <td>
@@ -34,8 +36,8 @@
                  alt="Crime Image" class="img-fluid" width="200" height="150">
                 {% endif %}
 
-                    <a href="{{ url_for('reports.edit_report', report_id=report._id) }}" class="btn btn-warning btn-sm">Edit</a>
-                    <form action="{{ url_for('reports.delete_report', report_id=report._id) }}" method="POST" style="display:inline;">
+                    <a href="{{ url_for('reports.edit_report', report_id=report['_id']) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <form action="{{ url_for('reports.delete_report', report_id=report['_id']) }}" method="POST" style="display:inline;">
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                     </form>
                 
