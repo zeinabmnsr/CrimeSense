@@ -83,4 +83,9 @@ def create_app():
 
     from app.hotspots.hotspots_routes import hotspots_bp 
     app.register_blueprint(hotspots_bp)
+    
+    from app.legal_assistant.routes import legal_bp
+    app.register_blueprint(legal_bp)
+
+    
     return app

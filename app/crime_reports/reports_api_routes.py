@@ -32,6 +32,7 @@ def create_report():
         if image and allowed_file(image.filename):
             filename = secure_filename(image.filename)
             image_filename = datetime.utcnow().strftime("%Y%m%d%H%M%S_") + filename
+            os.makedirs(UPLOAD_FOLDER, exist_ok=True)
             image.save(os.path.join(UPLOAD_FOLDER, image_filename))
             data['image_path'] = image_filename
         else:
@@ -65,7 +66,7 @@ def create_report():
         # Insert into DB
     report_id = CrimeReport.created_report(report_data, db)
     return jsonify({"message": "Report created successfully", "report_id": str(report_id)}), 201
-
+ 
 @reports_api_bp.route("/my-reports", methods=['GET'])
 @jwt_required()
 def get_my_reports():
