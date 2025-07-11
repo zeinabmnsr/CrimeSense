@@ -6,3 +6,4 @@ __pycache__
 /app/prediction_model/model/
 /app/prediction_model/encoders/ 
 /app/prediction_model/
+app/legal_assistant/sample_data.json

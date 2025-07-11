@@ -16,3 +16,21 @@ def legal_chat():
         return jsonify({"answer": answer})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+#"RAG" system working:
+# User query → vector → similar legal text
+#  → send to model → generate reply
+'''
+Now You Can Test the Chatbot!
+Use Postman/Thunder Client:
+POST /api/legalbot
+Body (JSON):
+json
+Copy code
+{
+  "query": "Can I be arrested for trespassing?"
+}
+✅ If it returns a legal-sounding answer, 
+you’re done with Phase 1 🎉
+
+'''
