@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UK Legal Assistant Chatbot</title>
+  <style>
+    body { font-family: Arial; padding: 2rem; background: #f4f4f4; }
+    .chatbox { max-width: 600px; margin: auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 0 10px #ccc; }
+    textarea { width: 100%; height: 80px; }
+    .response { margin-top: 1rem; background: #e1f5fe; padding: 1rem; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <div class="chatbox">
+    <h2>UK Legal Assistant Chatbot</h2>
+    <form id="chatForm">
+      <textarea id="userInput" placeholder="Ask a legal question..."></textarea><br>
+      <button type="submit">Ask</button>
+    </form>
+    <div id="responseBox" class="response" style="display:none;"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("chatForm");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const input = document.getElementById("userInput").value.trim();
+      const resBox = document.getElementById("responseBox");
+
+      resBox.style.display = "block";
+      resBox.textContent = "Thinking...";
+
+      try {
+        const res = await fetch("/api/legalbot", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: input })
+        });
+        const data = await res.json();
+        resBox.textContent = data.answer || "No response.";
+      } catch (err) {
+        resBox.textContent = "Something went wrong. Try again later.";
+      }
+    });
+  </script>
+</body>
+</html>

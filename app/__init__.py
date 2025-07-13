@@ -42,6 +42,10 @@ def create_app():
     db = client.get_database() 
     app.db = db  
     
+    with app.app_context():
+        if app.db["parsed_crimes"].count_documents({}) == 0:
+            parse_and_insert()
+
     #current_app.db["parsed_crimes"]
 
     limiter = Limiter(
@@ -88,5 +92,4 @@ def create_app():
     csrf.exempt(legal_bp)
     app.register_blueprint(legal_bp)
 
-    
     return app

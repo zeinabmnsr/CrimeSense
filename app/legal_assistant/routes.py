@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from .rag_engine import generate_answer
+from flask import render_template
 
 legal_bp = Blueprint("legal", __name__, url_prefix="/api/legalbot")
 
@@ -16,6 +17,10 @@ def legal_chat():
         return jsonify({"answer": answer})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@legal_bp.route("/chat-ui")
+def legal_chat_ui():
+    return render_template("legal_chatbot.html")
 
 #"RAG" system working:
 # User query → vector → similar legal text

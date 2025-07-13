@@ -7,8 +7,7 @@ def parse_and_insert():
     collection = current_app.db["parsed_crimes"]
 
     file_path = "app/crime_parser/prc-csp-mar16-dec24-tables-240425.xlsx"
-    sheets = ["2021_22", "2022_23", "2023_24", "2024_25"]
-    #sheets = ["2023_24"]
+    sheets = ["2024_25"]
 
     quarter_month_map = {
         "Q1" : "04-01",
