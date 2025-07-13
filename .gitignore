@@ -7,3 +7,4 @@ __pycache__
 /app/prediction_model/encoders/ 
 /app/prediction_model/
 app/legal_assistant/sample_data.json
+app/crime_parser/parse_crime_data.py
