@@ -9,7 +9,7 @@ import os
 from flask_jwt_extended import JWTManager
 from flask_login import LoginManager 
 from app.models.user import User 
-from app.crime_parser.parse_crime_data import parse_and_insert
+#from app.crime_parser.parse_crime_data import parse_and_insert
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 login_manager = LoginManager()
