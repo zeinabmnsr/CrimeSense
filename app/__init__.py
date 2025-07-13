@@ -96,3 +96,4 @@ def create_app():
     app.register_blueprint(legal_bp)
 
     return app
+#hello, testingg
