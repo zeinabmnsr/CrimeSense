@@ -24,7 +24,7 @@ def generate_answer(query):
     }
 
     data = {
-        "model": "meta-llama/llama-4-maverick:free",
+        "model": "mistralai/mistral-7b-instruct:free",
         "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt}
