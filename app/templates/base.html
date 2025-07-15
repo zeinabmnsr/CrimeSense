@@ -2,25 +2,185 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}CrimeSense{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CrimeSense - Advanced Crime Prevention{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
-
-    <nav>
-    <a href="{{ url_for('reports.list_admin_reports') }}">Admin Reports</a>
-    <a href="{{ url_for('reports.list_user_reports') }}">Mobile User Reports</a>
-    <a href="{{ url_for('reports.create_report') }}">Create Report</a>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('home') }}">
+                <i class="fas fa-shield-alt text-danger me-2 fs-3"></i>
+                <span class="fw-bold fs-3">CrimeSense</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('contactus') }}">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="alert('Privacy Policy page coming soon!')">Privacy Policy</a>
+                    </li>
+                    
+                    {% if session.user_id and session.user_role == 'admin' %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                Admin Services
+                            </a>
+                              <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ url_for('reports.create_report') }}">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>Crime Reports
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('hotspots.list_hotspots') }}">
+                                    <i class="fas fa-map-marker-alt me-2"></i>Crime Hotspots
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('profile.view_profile') }}">
+                                    <i class="fas fa-user me-2"></i>My Profile
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('auth.admin_users') }}">
+                                    <i class="fas fa-users me-2"></i>Manage Users
+                                </a></li>
+                                {% if session.is_super_admin %}
+                                <li><a class="dropdown-item" href="{{ url_for('auth.register') }}">
+                                    <i class="fas fa-user-plus me-2"></i>Create Admin
+                                </a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+                
+                <div class="d-flex gap-2 align-items-center">
+                    {% if session.user_id %}
+                        <span class="text-muted me-2">
+                            Welcome, {{ session.user_name }}! 
+                            {% if session.user_role == 'admin' %}
+                                <span class="badge bg-danger">
+                                    {% if session.is_super_admin %}Super Admin{% else %}Admin{% endif %}
+                                </span>
+                            {% endif %}
+                        </span>
+                        <a href="{{ url_for('auth.dashboard') }}" class="btn btn-outline-danger btn-sm">
+                            <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                        </a>
+                        <form method="POST" action="{{ url_for('auth.logout') }}" class="d-inline">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-sign-out-alt me-1"></i> Logout
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-danger btn-sm">
+                            <i class="fas fa-sign-in-alt me-1"></i> Admin Login
+                        </a>
+                    {% endif %}
+                    
+                    <div class="d-flex gap-2 ms-3">
+                        <a href="{{ url_for('download_ios') }}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fab fa-apple me-1"></i> iOS
+                        </a>
+                        <a href="{{ url_for('download_android') }}" class="btn btn-secondary btn-sm">
+                            <i class="fab fa-google-play me-1"></i> Android
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </nav>
- 
-    
-  {% block content %}
-  <!-- Page-specific content will appear here -->
-  {% endblock %}
 
-    <footer>
-        <p>&copy; 2025 CrimeSense</p>
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'info' if category == 'info' else 'danger' }} alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-shield-alt text-danger me-2 fs-3"></i>
+                        <span class="fw-bold fs-4">CrimeSense</span>
+                    </div>
+                    <p class="text-muted">Making communities safer through innovative technology and collaboration.</p>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <h5 class="mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('home') }}" class="text-muted text-decoration-none">Home</a></li>
+                        <li><a href="{{ url_for('about') }}" class="text-muted text-decoration-none">About</a></li>
+                        <li><a href="{{ url_for('contactus') }}" class="text-muted text-decoration-none">Contact</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none" onclick="alert('Privacy Policy page coming soon!')">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <h5 class="mb-3">Download App</h5>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('download_ios') }}" class="btn btn-outline-light btn-sm">
+                            <i class="fab fa-apple me-2"></i>Download for iOS
+                        </a>
+                        <a href="{{ url_for('download_android') }}" class="btn btn-outline-light btn-sm">
+                            <i class="fab fa-google-play me-2"></i>Download for Android
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <h5 class="mb-3">Support</h5>
+                    <ul class="list-unstyled text-muted">
+                        <li>Emergency: 911</li>
+                        <li>Support: +1 (555) 123-4567</li>
+                        <li>Email: support@crimesense.com</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4">
+            <div class="text-center text-muted">
+                <p>&copy; 2024 CrimeSense. All rights reserved.</p>
+            </div>
+        </div>
     </footer>
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    {% block extra_scripts %}{% endblock %}
 </body>
 </html>

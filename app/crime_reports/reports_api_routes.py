@@ -54,7 +54,8 @@ def create_report():
         "submitter_role": "user",
         "is_public": False,
         "status": "Pending",
-        "image_path": data.get("image_path")
+        "image_path": data.get("image_path"),
+        "date_reported": datetime.utcnow()
     }
 
     # Validate required fields 
@@ -80,6 +81,16 @@ def get_my_reports():
     for report in reports:
         report['_id'] = str(report['_id'])
         report['reported_by'] = str(report['reported_by'])
+        filters = {}
+    if 'crime_type' in request.args:
+        filters['crime_type'] = request.args['crime_type']
+    if 'location' in request.args:
+        filters['location'] = {"$regex": request.args['location'], "$options": "i"}
+    if 'status' in request.args:
+        filters['status'] = request.args['status']
+    if 'is_public' in request.args:
+        filters['is_public'] = request.args['is_public'].lower() == 'true'
+    
 
     return jsonify(reports), 200
 

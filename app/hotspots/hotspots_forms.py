@@ -17,3 +17,7 @@ class HotspotsForm(FlaskForm):
     lat = HiddenField("Latitude")
     lng = HiddenField("Longitude")
     submit = SubmitField("Add Hotspot")
+
+
+class DeleteHotspotForm(FlaskForm):
+    submit = SubmitField("Delete")

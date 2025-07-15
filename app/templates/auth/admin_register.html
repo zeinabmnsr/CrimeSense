@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Create Admin - CrimeSense{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-danger text-white text-center py-4">
+                    <h3 class="mb-0">
+                        <i class="fas fa-user-shield me-2"></i>
+                        Create New Admin
+                    </h3>
+                    <p class="mb-0 mt-2 opacity-75">Super Admin Access Required</p>
+                </div>
+                <div class="card-body p-5">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                {{ form.first_name.label(class="form-label fw-bold") }}
+                                {{ form.first_name(class="form-control") }}
+                                {% if form.first_name.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.first_name.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                {{ form.last_name.label(class="form-label fw-bold") }}
+                                {{ form.last_name(class="form-control") }}
+                                {% if form.last_name.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.last_name.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ form.email.label(class="form-label fw-bold") }}
+                            {{ form.email(class="form-control") }}
+                            {% if form.email.errors %}
+                                <div class="text-danger mt-1">
+                                    {% for error in form.email.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                {{ form.password.label(class="form-label fw-bold") }}
+                                {{ form.password(class="form-control") }}
+                                {% if form.password.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.password.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <small class="text-muted">Min 8 chars, uppercase, lowercase, number, special char</small>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                {{ form.confirm_password.label(class="form-label fw-bold") }}
+                                {{ form.confirm_password(class="form-control") }}
+                                {% if form.confirm_password.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.confirm_password.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            {{ form.is_super_admin.label(class="form-label fw-bold") }}
+                            {{ form.is_super_admin(class="form-select") }}
+                            <small class="text-muted">Super admins can create other admins</small>
+                        </div>
+                        
+                        <div class="d-grid mb-4">
+                            {{ form.submit(class="btn btn-danger btn-lg") }}
+                        </div>
+                        
+                        <div class="text-center">
+                            <a href="{{ url_for('auth.dashboard') }}" class="text-muted text-decoration-none">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

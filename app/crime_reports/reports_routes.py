@@ -6,7 +6,7 @@ from app.models import reports
 from app.models.reports import CrimeReport
 from app.models.user import User
 from app.auth.decorators import login_required
-from app.crime_reports.reports_forms import CrimeReportForm
+from app.crime_reports.reports_forms import CrimeReportForm, DeleteReportForm
 from flask_login import current_user
 import os
 from werkzeug.utils import secure_filename
@@ -26,10 +26,10 @@ def list_admin_reports():
     for report in reports:
         reporter = db.users.find_one({"_id": report["reported_by"]})
         report["reporter_name"] = f"{reporter.get('first_name', '')} {reporter.get('last_name', '')}" if reporter else "Unknown"
-    
-    return render_template("reports/list_admin.html", reports=reports)
+    delete_form = DeleteReportForm()
+    return render_template("reports/list_reports.html", reports=reports, form=delete_form)
 
-@reports_bp.route("/reports/create", methods=["GET", "POST"])
+@reports_bp.route("/create", methods=["GET", "POST"])
 @login_required
 def create_report():
     """Admin creates a new crime report"""
@@ -67,7 +67,7 @@ def create_report():
 
     return render_template("reports/create.html", form=form)
 
-@reports_bp.route("/reports/edit/<report_id>", methods=["GET", "POST"])
+@reports_bp.route("/edit/<report_id>", methods=["GET", "POST"])
 @login_required
 def edit_report(report_id):
     """Admin edits an existing crime report"""
@@ -76,7 +76,7 @@ def edit_report(report_id):
         report = CrimeReport.get_report_by_id(report_id, db)
     except InvalidId:
         flash("Invalid report ID.", "danger")
-        return redirect(url_for("reports.list_admin_reports"))
+        return redirect(url_for("reports.list_reports"))
     
     if not report:
         flash("Report not found.", "danger")
@@ -114,7 +114,7 @@ def edit_report(report_id):
 
     return render_template("reports/edit.html", form=form, report_id=report_id)
 
-@reports_bp.route("/reports/delete/<report_id>", methods=["POST"])
+@reports_bp.route("/delete/<report_id>", methods=["POST"])
 @login_required
 def delete_report(report_id):
     """Admin deletes a crime report"""
@@ -142,7 +142,8 @@ def delete_report(report_id):
     flash("Crime report deleted successfully!", "success")
     return redirect(url_for("reports.list_admin_reports"))
 
-@reports_bp.route("/reports/user-submissions", methods=["GET"])
+#hyde bda render template tenye, needs to be changed i guess
+@reports_bp.route("/user-submissions", methods=["GET"])
 @login_required
 def list_user_reports():
     """Show only reports submitted by mobile users"""

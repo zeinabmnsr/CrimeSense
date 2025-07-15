@@ -16,18 +16,20 @@ def get_hotspots():
     hotspots = Hotspot.get_all_hotspots(db) #fena nzed filter=loc = current loc aw user loc
     return jsonify(hotspots), 200
 '''
-
-@hotspots_api_bp.route("get_all_hotspots", methods=['GET'])
+# we modified the route from get_all_hotspots to /
+@hotspots_api_bp.route("/", methods=['GET'])
 @jwt_required() 
 def get_hotspots():
+    """Get all hotspots with optional filters"""
     db = current_app.db
-    #feke t7ote filter aal loc
+    
+    # Build filters from query parameters
     filters = {}
     if 'crime_type' in request.args:
         filters['crime_type'] = request.args['crime_type']
     if 'location' in request.args:
-        # Using regex for partial matching on location
-         filters['location'] = {"$regex": request.args['location'], "$options": "i"}
+        # Using regex for partial matching on location 
+        filters['location'] = {"$regex": request.args['location'], "$options": "i"}
     if 'danger_time' in request.args:
         try: 
             search_date = datetime.strptime(request.args['danger_time'], "%Y-%m-%d")
@@ -37,11 +39,17 @@ def get_hotspots():
             }
         except ValueError:
             return jsonify({"error": "Invalid date format. Please use YYYY-MM-DD."}), 400
-
-    hotspots = Hotspot.get_all_hotspots(db, filters=filters)
-
-    for hotspot in hotspots:
-        hotspot['_id'] = str(hotspot['_id'])
-        hotspot['created_by'] = str(hotspot['created_by'])
-
-    return jsonify(hotspots), 200
+    
+    try:
+        hotspots = Hotspot.get_all_hotspots(db, filters=filters)
+        for hotspot in hotspots:
+            hotspot['_id'] = str(hotspot['_id'])
+            hotspot['created_by'] = str(hotspot['created_by'])
+            if 'danger_time' in hotspot and hotspot['danger_time']:
+                hotspot['danger_time'] = hotspot['danger_time'].isoformat()
+            if 'created_at' in hotspot and hotspot['created_at']:
+                hotspot['created_at'] = hotspot['created_at'].isoformat()
+        
+        return jsonify(hotspots), 200
+    except Exception as e:
+        return jsonify({"error": "Failed to fetch hotspots"}), 500 

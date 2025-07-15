@@ -1,40 +1,85 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block title %}Edit Hotspot - CrimeSense{% endblock %}
+
 {% block content %}
-  <h2>Edit Hotspot</h2>
-
-  <form method="POST">
-    {{ form.hidden_tag() }}
-
-    <div>
-      {{ form.crime_type.label }}<br>
-      {{ form.crime_type() }}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>Edit Crime Hotspot
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.crime_type.label(class="form-label fw-bold") }}
+                                {{ form.crime_type(class="form-select") }}
+                                {% if form.crime_type.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.crime_type.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                {{ form.danger_time.label(class="form-label fw-bold") }}
+                                {{ form.danger_time(class="form-control") }}
+                                {% if form.danger_time.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.danger_time.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.location.label(class="form-label fw-bold") }}
+                            {{ form.location(class="form-control") }}
+                            {% if form.location.errors %}
+                                <div class="text-danger mt-1">
+                                    {% for error in form.location.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.notes.label(class="form-label fw-bold") }}
+                            {{ form.notes(class="form-control", rows="4") }}
+                            {% if form.notes.errors %}
+                                <div class="text-danger mt-1">
+                                    {% for error in form.notes.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Hidden fields for coordinates -->
+                        {{ form.lat() }}
+                        {{ form.lng() }}
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('hotspots.list_hotspots') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Cancel
+                            </a>
+                            {{ form.submit(class="btn btn-danger", value="Update Hotspot") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div>
-      {{ form.location.label }}<br>
-      {{ form.location() }}
-    </div>
-
-    <div>
-      {{ form.danger_time.label }}<br>
-      {{ form.danger_time() }}
-    </div>
-
-    <div>
-      {{ form.notes.label }}<br>
-      {{ form.notes(rows=3) }}
-    </div>
-
-    <div>
-      {{ form.lat.label }}<br>
-      {{ form.lat() }}
-    </div>
-
-    <div>
-      {{ form.lng.label }}<br>
-      {{ form.lng() }}
-    </div>
-
-    <button type="submit">Update</button>
-  </form>
+</div>
 {% endblock %}

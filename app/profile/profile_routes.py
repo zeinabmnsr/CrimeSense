@@ -23,7 +23,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@profile_bp.route("/profile")
+@profile_bp.route("/")
 @login_required
 def view_profile():
     """Display user's profile page."""
@@ -58,7 +58,7 @@ def view_profile():
         flash("Invalid user ID.", "danger")
         return redirect(url_for("auth.login"))
 
-@profile_bp.route("/profile/edit", methods=["GET", "POST"])
+@profile_bp.route("/edit", methods=["GET", "POST"])
 @login_required
 def edit_profile():
     """Edit user's profile information."""
@@ -115,7 +115,7 @@ def edit_profile():
         flash("Invalid user ID.", "danger")
         return redirect(url_for("auth.login"))
 
-@profile_bp.route("/profile/change-password", methods=["GET", "POST"])
+@profile_bp.route("/change-password", methods=["GET", "POST"])
 @login_required
 def change_password():
     """Change user's password."""
@@ -143,7 +143,7 @@ def change_password():
     
     return render_template("profile/change_password.html", form=form)
 
-@profile_bp.route("/profile/settings", methods=["GET", "POST"])
+@profile_bp.route("/settings", methods=["GET", "POST"])
 @login_required
 def profile_settings():
     """Manage profile settings and preferences."""
@@ -183,80 +183,9 @@ def profile_settings():
         flash("Invalid user ID.", "danger")
         return redirect(url_for("auth.login"))
 
-@profile_bp.route("/profile/upload-picture", methods=["GET", "POST"])
+@profile_bp.route("/notifications", methods=["GET", "POST"])
 @login_required
-def upload_picture():
-    """Upload profile picture."""
-    form = ProfilePictureForm()
-    
-    if form.validate_on_submit():
-        db = current_app.db
-        user_id = session.get("user_id")
-        
-        avatar = form.avatar.data
-        if allowed_file(avatar.filename):
-            # Create upload directory if it doesn't exist
-            os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-            
-            filename = secure_filename(avatar.filename)
-            unique_filename = f"{user_id}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{filename}"
-            avatar.save(os.path.join(UPLOAD_FOLDER, unique_filename))
-            
-            avatar_url = f"/static/uploads/profiles/{unique_filename}"
-            
-            # Update user's avatar in database
-            db.users.update_one(
-                {"_id": ObjectId(user_id)},
-                {"$set": {"avatar": avatar_url, "updated_at": datetime.utcnow()}}
-            )
-            
-            flash("Profile picture uploaded successfully!", "success")
-            return redirect(url_for("profile.view_profile"))
-        else:
-            flash("Invalid file type. Please upload JPG, JPEG, PNG, or GIF files only.", "danger")
-    
-    return render_template("profile/upload_picture.html", form=form)
-
-@profile_bp.route("/profile/contact-info", methods=["GET", "POST"])
-@login_required
-def contact_info():
-    """Manage contact information."""
-    db = current_app.db
-    user_id = session.get("user_id")
-    
-    try:
-        user_data = db.users.find_one({"_id": ObjectId(user_id)})
-        if not user_data:
-            flash("User not found.", "danger")
-            return redirect(url_for("auth.login"))
-        
-        form = ContactInfoForm(data=user_data)
-        
-        if form.validate_on_submit():
-            contact_data = {
-                "phone": form.phone.data,
-                "address": form.address.data,
-                "website": form.website.data,
-                "social_media": form.social_media.data,
-                "updated_at": datetime.utcnow()
-            }
-            
-            db.users.update_one(
-                {"_id": ObjectId(user_id)},
-                {"$set": contact_data}
-            )
-            
-            flash("Contact information updated successfully!", "success")
-            return redirect(url_for("profile.view_profile"))
-        
-        return render_template("profile/contact_info.html", form=form)
-        
-    except InvalidId:
-        flash("Invalid user ID.", "danger")
-        return redirect(url_for("auth.login"))
-
-@profile_bp.route("/profile/notifications", methods=["GET", "POST"])
-@login_required
+# notifications.html
 def notification_preferences():
     """Manage notification preferences."""
     db = current_app.db
@@ -295,7 +224,7 @@ def notification_preferences():
         flash("Invalid user ID.", "danger")
         return redirect(url_for("auth.login"))
 
-@profile_bp.route("/profile/delete-account", methods=["GET", "POST"])
+@profile_bp.route("/delete-account", methods=["GET", "POST"])
 @login_required
 def delete_account():
     """Delete user account."""
@@ -319,7 +248,7 @@ def delete_account():
     
     return render_template("profile/delete_account.html", form=form)
 
-@profile_bp.route("/profile/activity")
+@profile_bp.route("/activity")
 @login_required
 def activity_log():
     """Display user's activity log."""

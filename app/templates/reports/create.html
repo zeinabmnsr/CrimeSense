@@ -1,50 +1,144 @@
 {% extends "base.html" %}
+
+{% block title %}Create Crime Report - CrimeSense{% endblock %}
+
 {% block content %}
-
-    <h2>Create Crime Report</h2>
-    <form method="POST" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-
-        <div class="form-group">
-            <label for="title">Title</label>
-            {{ form.title(class="form-control") }}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-plus me-2"></i>Create Crime Report
+                    </h3>
+                    <p class="mb-0 mt-2">Report a crime incident to help keep your community safe</p>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            {{ form.title.label(class="form-label fw-bold") }}
+                            {{ form.title(class="form-control") }}
+                            {% if form.title.errors %}
+                                <div class="text-danger mt-1">
+                                    {% for error in form.title.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.crime_type.label(class="form-label fw-bold") }}
+                                {{ form.crime_type(class="form-select") }}
+                                {% if form.crime_type.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.crime_type.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                {{ form.date_occured.label(class="form-label fw-bold") }}
+                                {{ form.date_occured(class="form-control") }}
+                                {% if form.date_occured.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.date_occured.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.location.label(class="form-label fw-bold") }}
+                            {{ form.location(class="form-control") }}
+                            <div class="form-text">
+                                <small class="text-muted">Enter the specific location where the incident occurred</small>
+                            </div>
+                            {% if form.location.errors %}
+                                <div class="text-danger mt-1">
+                                    {% for error in form.location.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.description.label(class="form-label fw-bold") }}
+                            {{ form.description(class="form-control", rows="4") }}
+                            <div class="form-text">
+                                <small class="text-muted">Provide detailed information about the incident</small>
+                            </div>
+                            {% if form.description.errors %}
+                                <div class="text-danger mt-1">
+                                    {% for error in form.description.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.image.label(class="form-label fw-bold") }}
+                            {{ form.image(class="form-control") }}
+                            <div class="form-text">
+                                <small class="text-muted">Upload an image if available (JPG, JPEG, PNG, or GIF)</small>
+                            </div>
+                            {% if form.image.errors %}
+                                <div class="text-danger mt-1">
+                                    {% for error in form.image.errors %}
+                                        <small>{{ error }}</small>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.status.label(class="form-label fw-bold") }}
+                                {{ form.status(class="form-select") }}
+                                {% if form.status.errors %}
+                                    <div class="text-danger mt-1">
+                                        {% for error in form.status.errors %}
+                                            <small>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3 d-flex align-items-center">
+                                <div class="form-check">
+                                    {{ form.is_public(class="form-check-input") }}
+                                    {{ form.is_public.label(class="form-check-label fw-bold") }}
+                                    <div class="form-text">
+                                        <small class="text-muted">Allow other users to see this report</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Note:</strong> Your report will help law enforcement and community members stay aware of criminal activities in your area.
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('reports.list_user_reports') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Cancel
+                            </a>
+                            {{ form.submit(class="btn btn-danger") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-         <div class="form-group">
-            <label for="description">Description</label>
-            {{ form.description(class="form-control", rows=4) }}
-        </div>
-
-        <div class="form-group">
-            <label for="location">Location</label>
-            {{ form.location(class="form-control") }}
-        </div>
-
-        <div class="form-group">
-            <label for="crime_type">Crime Type</label>
-            {{ form.crime_type(class="form-control") }}
-        </div>
-
-        <div class="form-group">
-            {{ form.date_occured.label }}<br>
-            {{ form.date_occured(class="form-control", type="date") }}
-        </div>
-
-        <div class="form-group">
-            <label for="is_public">Make Public</label>
-            {{ form.is_public(class="form-check-input") }}
-        </div>
-
-         <div class="form-group">
-            <label for="status">Status</label>
-            {{ form.status(class="form-control") }}
-        </div>
-
-        <div class="form-group">
-            {{ form.image.label }} <br>
-            {{ form.image(class='form-control-file') }}
-        </div>
-
-        <button type="submit" class="btn btn-primary">Submit Report</button>
-    </form>
+    </div>
+</div>
 {% endblock %}

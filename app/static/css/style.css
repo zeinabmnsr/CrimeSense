@@ -1,0 +1,139 @@
+/* Custom Styles for CrimeSense */
+
+:root {
+  --primary-color: #dc3545;
+  --secondary-color: #6c757d;
+  --dark-color: #212529;
+  --light-color: #f8f9fa;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+}
+
+/* Hero Carousel Styles */
+.hero-slide {
+  height: 100vh;
+  min-height: 600px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-item {
+  height: 100vh;
+  min-height: 600px;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  padding: 20px;
+}
+
+/* Navigation Styles */
+.navbar-brand {
+  font-size: 1.8rem;
+}
+
+     
+
+/* Card Hover Effects */
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Button Styles */
+.btn-danger {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* Footer Styles */
+footer {
+  background-color: var(--dark-color) !important;
+}
+
+footer a:hover {
+  color: var(--primary-color) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-slide {
+    height: 70vh;
+    min-height: 500px;
+  }
+
+  .carousel-item {
+    height: 70vh;
+    min-height: 500px;
+  }
+
+  .display-1 {
+    font-size: 3rem;
+  }
+
+  .display-4 {
+    font-size: 2rem;
+  }
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Form Styles */
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Alert Styles */
+.alert {
+  border: none;
+  border-radius: 10px;
+}
+
+/* Loading Spinner */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}

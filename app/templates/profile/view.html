@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - CrimeSense{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="display-5 fw-bold">
+                    <i class="fas fa-user text-danger me-3"></i>
+                    My Profile
+                </h1>
+                <div>
+                    <a href="{{ url_for('profile.edit_profile') }}" class="btn btn-outline-danger me-2">
+                        <i class="fas fa-edit me-2"></i>Edit Profile
+                    </a>
+                    <a href="{{ url_for('auth.dashboard') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Profile Information -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center p-4">
+                    <div class="mb-4">
+                        {% if user.avatar %}
+                            <img src="{{ user.avatar }}" alt="Profile Picture" 
+                                 class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
+                        {% else %}
+                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                 style="width: 120px; height: 120px;">
+                                <i class="fas fa-user text-danger" style="font-size: 3rem;"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <h4 class="mb-2">{{ user.first_name }} {{ user.last_name }}</h4>
+                    {% if user.display_name %}
+                        <p class="text-muted mb-2">"{{ user.display_name }}"</p>
+                    {% endif %}
+                    <p class="text-muted mb-3">{{ user.email }}</p>
+                    
+                    {% if user.bio %}
+                        <div class="mb-3">
+                            <small class="text-muted">{{ user.bio }}</small>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="row text-center">
+                        <div class="col-4">
+                            <h5 class="text-danger mb-0">{{ stats.reports_count }}</h5>
+                            <small class="text-muted">Reports</small>
+                        </div>
+                        <div class="col-4">
+                            <h5 class="text-danger mb-0">{{ stats.hotspots_count }}</h5>
+                            <small class="text-muted">Hotspots</small>
+                        </div>
+                        <div class="col-4">
+                            <h5 class="text-danger mb-0">{{ stats.reputation_score }}</h5>
+                            <small class="text-muted">Score</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Profile Details -->
+        <div class="col-md-8 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Profile Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <strong>First Name:</strong>
+                            <p class="mb-0">{{ user.first_name }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Last Name:</strong>
+                            <p class="mb-0">{{ user.last_name }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Email:</strong>
+                            <p class="mb-0">{{ user.email }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Phone:</strong>
+                            <p class="mb-0">{{ user.phone or 'Not provided' }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Location:</strong>
+                            <p class="mb-0">{{ user.location or 'Not provided' }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <strong>Member Since:</strong>
+                            <p class="mb-0">{{ user.created_at.strftime('%B %d, %Y') if user.created_at else 'N/A' }}</p>
+                        </div>
+                    </div>
+                    
+                    {% if user.bio %}
+                        <div class="mt-3">
+                            <strong>Bio:</strong>
+                            <p class="mb-0">{{ user.bio }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-bolt me-2"></i>Quick Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ url_for('profile.edit_profile') }}" class="btn btn-outline-danger w-100">
+                                <i class="fas fa-edit mb-2 d-block" style="font-size: 1.5rem;"></i>
+                                Edit Profile
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ url_for('profile.change_password') }}" class="btn btn-outline-danger w-100">
+                                <i class="fas fa-key mb-2 d-block" style="font-size: 1.5rem;"></i>
+                                Change Password
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ url_for('profile.profile_settings') }}" class="btn btn-outline-danger w-100">
+                                <i class="fas fa-cog mb-2 d-block" style="font-size: 1.5rem;"></i>
+                                Settings
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ url_for('profile.activity_log') }}" class="btn btn-outline-danger w-100">
+                                <i class="fas fa-history mb-2 d-block" style="font-size: 1.5rem;"></i>
+                                Activity Log
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

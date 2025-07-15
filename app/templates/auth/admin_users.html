@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Users - CrimeSense{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="display-6 fw-bold text-danger">
+                    <i class="fas fa-users me-3"></i>User Management
+                </h1>
+                {% if session.is_super_admin %}
+                <a href="{{ url_for('auth.register') }}" class="btn btn-danger">
+                    <i class="fas fa-user-plus me-2"></i>Create Admin
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">All Users</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Created</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                               {{ (user.get('first_name') or '')[:1] }}{{ (user.get('last_name') or '')[:1] }}
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">{{ user.get('first_name', '') }} {{ user.get('last_name', '') }}
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{ user.email }}</td>
+                                    <td>
+                                        {% if user.role == 'admin' %}
+                                            <span class="badge bg-danger">
+                                                {% if user.is_super_admin %}Super Admin{% else %}Admin{% endif %}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">User</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if user.created_at %}
+                                            {{ user.created_at.strftime('%Y-%m-%d') }}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">Active</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12 text-center">
+            <a href="{{ url_for('auth.dashboard') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.avatar-sm {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+}
+</style>
+{% endblock %}
